@@ -26,7 +26,9 @@ SCOPES = [
 DAYS_TO_CONSIDER = 7
 
 # Name that will be shown in the email greetings.
-DISPLAY_NAME = "Carlos"
+DISPLAY_NAME = "USERNAME"
+EMAIL_FROM = ""
+EMAIL_TO = ""
 
 
 def load_notion_credentials():
@@ -144,9 +146,9 @@ def send_email_with_tasks(all_tasks):
         service = build('gmail', 'v1', credentials=creds)
         message = MIMEText(email_message, 'html')
 
-        message['To'] = 'carlos@raccoon.ag'
-        message['From'] = 'carlosplfilho@gmail.com'
-        message['Subject'] = 'Carlos\'s Notion Bot - Tasks'
+        message['To'] = EMAIL_TO
+        message['From'] = EMAIL_FROM
+        message['Subject'] = 'My Notion Bot - Tasks'
 
         encoded_message = base64.urlsafe_b64encode(message.as_bytes()) \
             .decode()
