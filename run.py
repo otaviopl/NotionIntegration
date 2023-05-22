@@ -25,11 +25,6 @@ SCOPES = [
 # Filter the Tasks search using this number of days in the future.
 DAYS_TO_CONSIDER = 7
 
-# Name that will be shown in the email greetings.
-DISPLAY_NAME = "USERNAME"
-EMAIL_FROM = ""
-EMAIL_TO = ""
-
 
 def load_notion_credentials():
     """
@@ -39,6 +34,17 @@ def load_notion_credentials():
     with open("notion_credentials.json", "r") as notion_credentials:
         notion_keys = json.load(notion_credentials)
     return notion_keys
+
+
+def load_email_config():
+    """
+    Load Email configurations, like email address 'from' and 'to'
+    from 'email_config.json' file.
+    """
+    email_config = {}
+    with open("email_config.json", "r") as email_config_file:
+        email_config = json.load(email_config_file)
+    return email_config
 
 
 def collect_tasks_from_control_panel(n_days=7):
@@ -118,14 +124,14 @@ def gmail_connect():
             token.write(creds.to_json())
 
 
-def build_email_body(all_tasks):
+def build_email_body(all_tasks, display_name):
     """
     Build the email HTML using Jinja2. Template is in template/ folder.
     """
     environment = Environment(loader=FileSystemLoader("templates/"))
     template = environment.get_template("email_template.html")
     context = {
-        "username": DISPLAY_NAME,
+        "username": display_name,
         "all_tasks": all_tasks
     }
 
@@ -139,15 +145,16 @@ def send_email_with_tasks(all_tasks):
     """
 
     creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    email_config = load_email_config()
 
-    email_message = build_email_body(all_tasks)
+    email_message = build_email_body(all_tasks, email_config["display_name"])
 
     try:
         service = build('gmail', 'v1', credentials=creds)
         message = MIMEText(email_message, 'html')
 
-        message['To'] = EMAIL_TO
-        message['From'] = EMAIL_FROM
+        message['To'] = email_config["email_to"]
+        message['From'] = email_config["email_from"]
         message['Subject'] = 'My Notion Bot - Tasks'
 
         encoded_message = base64.urlsafe_b64encode(message.as_bytes()) \
