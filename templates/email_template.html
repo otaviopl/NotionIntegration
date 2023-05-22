@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+
+  <body>
+    <div class="welcome">
+        <h1 id="title" style="color:#262626; font-size: 24px;">Olá, {{username}}</h1>
+        <p id="message" style="margin-top: 16px; margin-bottom: 40px; font-size: 18px;">
+            &#128640; - According to your Notion Control Panel, here are the tasks for the next 7 days:
+        </p>
+    </div>
+    <div class="task_list">
+        {% for task in all_tasks %}
+            <p class="single_task">{{ task.name }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="final_message">
+        <p id="final_message" style="margin-top: 40px; font-size: 18px">
+            Have a nice and focused day! &#127919;
+        </p>
+    </div>
+  </body>
+
+</html>
