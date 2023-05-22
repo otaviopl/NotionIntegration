@@ -18,13 +18,21 @@ The Google Cloud credentials file must be in the project root folder with the na
 
 Follow the [Notion guide](https://developers.notion.com/docs/authorization) and create your API credentials. Put it inside a `notion_credentials.json` file, following this format:
 
-```js
+```py
 {
     "database_id": "",
     "notion_key": ""
 }
 ```
 
-### Change the Display name in run.py
+### Create email configurations
 
-For now, the `run.py` file still contains some variables that need to be changed, like __'DISPLAY_NAME'__. In the future, this should be stored in project configuration files.
+The software will look for some settings like source and destination email inside the 'email_config.json' file in the root folder of the project. The file must follow the following format:
+
+```py
+{
+    "email_from": "<EMAIL_ADDR",
+    "email_to": "<EMAIL_ADDR>",
+    "display_name": "User Name"
+}
+```
