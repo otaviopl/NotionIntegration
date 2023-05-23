@@ -105,7 +105,8 @@ def collect_tasks_from_control_panel(n_days=7):
             }
         )
 
-    return all_task_data
+    sorted_tasks = sorted(all_task_data, key=lambda d: d['deadline'])
+    return sorted_tasks
 
 
 def gmail_connect():
