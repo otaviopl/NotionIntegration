@@ -3,6 +3,7 @@ import json
 import datetime
 import os.path
 import base64
+import random
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -24,6 +25,7 @@ SCOPES = [
 
 # Filter the Tasks search using this number of days in the future.
 DAYS_TO_CONSIDER = 7
+MESSAGES_API = "https://type.fit/api/quotes"
 
 
 def load_notion_credentials():
@@ -45,6 +47,11 @@ def load_email_config():
     with open("email_config.json", "r") as email_config_file:
         email_config = json.load(email_config_file)
     return email_config
+
+
+def get_motivational_message():
+    all_messages = requests.get("https://type.fit/api/quotes")
+    return random.choice(all_messages.json())
 
 
 def collect_tasks_from_control_panel(n_days=7):
@@ -128,11 +135,13 @@ def build_email_body(all_tasks, display_name):
     """
     Build the email HTML using Jinja2. Template is in template/ folder.
     """
+    nice_message = get_motivational_message()["text"]
     environment = Environment(loader=FileSystemLoader("templates/"))
     template = environment.get_template("email_template.html")
     context = {
         "username": display_name,
-        "all_tasks": all_tasks
+        "all_tasks": all_tasks,
+        "nice_message": nice_message
     }
 
     return template.render(context)
@@ -146,7 +155,6 @@ def send_email_with_tasks(all_tasks):
 
     creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     email_config = load_email_config()
-
     email_message = build_email_body(all_tasks, email_config["display_name"])
 
     try:
