@@ -16,6 +16,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 from email.mime.text import MIMEText
 
+from openai_connector import call_openai_assistant
+
 
 SCOPES = [
         'https://www.googleapis.com/auth/gmail.readonly',
@@ -50,6 +52,7 @@ def load_email_config():
 
 
 def get_motivational_message():
+    print("Getting nice message...")
     all_messages = requests.get("https://type.fit/api/quotes")
     return random.choice(all_messages.json())
 
@@ -106,6 +109,8 @@ def collect_tasks_from_control_panel(n_days=7):
         )
 
     sorted_tasks = sorted(all_task_data, key=lambda d: d['deadline'])
+
+    print("Done.")
     return sorted_tasks
 
 
@@ -132,31 +137,40 @@ def gmail_connect():
             token.write(creds.to_json())
 
 
-def build_email_body(all_tasks, display_name):
+def build_email_body(all_tasks, display_name, chatgpt_answer):
     """
     Build the email HTML using Jinja2. Template is in template/ folder.
     """
+    print("Building email body...")
+
+    # Breaking ChatGPT message lines in <br>
+    chatgpt_answer = chatgpt_answer.splitlines()
     nice_message = get_motivational_message()["text"]
     environment = Environment(loader=FileSystemLoader("templates/"))
     template = environment.get_template("email_template.html")
     context = {
         "username": display_name,
         "all_tasks": all_tasks,
-        "nice_message": nice_message
+        "nice_message": nice_message,
+        "chatgpt_answer": chatgpt_answer
     }
 
     return template.render(context)
 
 
-def send_email_with_tasks(all_tasks):
+def send_email_with_tasks(all_tasks, chatgpt_answer):
     """
     Considering a already created token.json file based on GCloud credentials,
     send an email using GMail API.
     """
-
+    print("Sending email...")
     creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     email_config = load_email_config()
-    email_message = build_email_body(all_tasks, email_config["display_name"])
+    email_message = build_email_body(
+        all_tasks,
+        email_config["display_name"],
+        chatgpt_answer
+    )
 
     try:
         service = build('gmail', 'v1', credentials=creds)
@@ -176,6 +190,8 @@ def send_email_with_tasks(all_tasks):
         send_message = (service.users().messages().send
                         (userId="me", body=create_message).execute())
 
+        print("Done.")
+
     except HttpError as error:
         print(F'An error occurred: {error}')
         send_message = None
@@ -185,4 +201,5 @@ def send_email_with_tasks(all_tasks):
 
 if __name__ == "__main__":
     all_tasks = collect_tasks_from_control_panel(n_days=DAYS_TO_CONSIDER)
-    send_email_with_tasks(all_tasks)
+    chatgpt_answer = call_openai_assistant(all_tasks)
+    send_email_with_tasks(all_tasks, chatgpt_answer)
