@@ -24,10 +24,15 @@ def call_openai_assistant(tasks):
 
 
 def build_message(tasks):
-    message = "Using few words, please help me to " + \
-        "prioritize the following tasks. Answer in portuguese. " + \
-        "Explain the importance of each one of the tasks. " + \
-        "(be brief and explain the prioritization) - (tasks are in portuguese)"
+    message = "Using few words, please help me to prioritize " + \
+        "the following tasks. Answer in portuguese.Explain the " + \
+        "importance of each one of the tasks." + \
+        "\nInstructions:" + \
+        "\n- Be brief and explain the prioritization." + \
+        "\n- Tasks are in portuguese." + \
+        "\n- Answer with the format: #. <task_description> " + \
+        "- (<explanation_about_importance>)" + \
+        "\nTasks: "
 
     for task in tasks:
         message += "\n - " + task["name"]

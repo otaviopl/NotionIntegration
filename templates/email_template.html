@@ -4,6 +4,7 @@
         <div class="divisor" style="width: 100%; height: 8px; background-color: #262626; border-radius: 3px; margin-bottom: 40px;"></div>
         <div class="welcome">
         <h1 id="title" style="color:#262626; font-size: 26px;">Olá, {{username}}.</h1>
+        <p>Segundo o seu Painel de Controle no Notion, essas são as suas tarefas para os próximos dias.</p>
         <p id="message" style="margin-top: 24px; margin-bottom: 40px; font-size: 20px;">
             <span style="font-size: 26px;">&#128236;</span> - Next 7 days tasks:
         </p>
@@ -16,7 +17,7 @@
 
         <div class="ChatGPT" style="margin-top: 40px;">
             <p><span style="font-size: 22px;">&#128752;</span><span style="font-size: 20px;"> - ChatGPT:</span></p>
-            <p style="font-size: 16px; font-style: italic;">Considerações do ChatGPT sobre as tarefas para os próximos 7 dias:</p>
+            <p style="font-size: 16px; font-style: italic;">Priorização via ChatGPT para as tarefas dos próximos dias:</p>
             {% for answer_line in chatgpt_answer %}
                 <p class="single_task" style="margin-top: 12px">&#10145; {{answer_line}}</p>
             {% endfor %}
