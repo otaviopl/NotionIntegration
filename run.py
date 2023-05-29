@@ -17,6 +17,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from email.mime.text import MIMEText
 
 from openai_connector import call_openai_assistant
+from dotenv import load_dotenv
 
 
 SCOPES = [
@@ -31,23 +32,17 @@ MESSAGES_API = "https://type.fit/api/quotes"
 
 
 def load_notion_credentials():
-    """
-    Load Notion credentials from 'notion_credentials.json' file.
-    """
     notion_keys = {}
-    with open("notion_credentials.json", "r") as notion_credentials:
-        notion_keys = json.load(notion_credentials)
+    notion_keys['database_id'] = os.getenv("NOTION_DATABASE_ID")
+    notion_keys['api_key'] = os.getenv("NOTION_API_KEY")
     return notion_keys
 
 
 def load_email_config():
-    """
-    Load Email configurations, like email address 'from' and 'to'
-    from 'email_config.json' file.
-    """
     email_config = {}
-    with open("email_config.json", "r") as email_config_file:
-        email_config = json.load(email_config_file)
+    email_config['email_from'] = os.getenv("EMAIL_FROM")
+    email_config['email_to'] = os.getenv("EMAIL_TO")
+    email_config['display_name'] = os.getenv("DISPLAY_NAME")
     return email_config
 
 
@@ -87,7 +82,7 @@ def collect_tasks_from_control_panel(n_days=7):
 
     headers = {
         "accept": "application/json",
-        "Authorization": "Bearer " + notion_credentials["notion_key"] + "",
+        "Authorization": "Bearer " + notion_credentials["api_key"] + "",
         "Notion-Version": "2022-06-28",
         "content-type": "application/json"
     }
@@ -200,6 +195,7 @@ def send_email_with_tasks(all_tasks, chatgpt_answer):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     all_tasks = collect_tasks_from_control_panel(n_days=DAYS_TO_CONSIDER)
     chatgpt_answer = call_openai_assistant(all_tasks)
     send_email_with_tasks(all_tasks, chatgpt_answer)
