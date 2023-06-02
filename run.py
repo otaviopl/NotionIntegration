@@ -198,4 +198,5 @@ if __name__ == "__main__":
     load_dotenv()
     all_tasks = collect_tasks_from_control_panel(n_days=DAYS_TO_CONSIDER)
     chatgpt_answer = call_openai_assistant(all_tasks)
+    gmail_connect()
     send_email_with_tasks(all_tasks, chatgpt_answer)
