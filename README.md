@@ -61,7 +61,7 @@ This software uses the [logging](https://docs.python.org/3/library/logging.html)
 LOG_PATH="."
 ```
 
-### Install requirements and go!
+### Install requirements and go! :racing_car:
 
 Now that all the necessary informations are present in the `.env` file, you just need to install the python requirements and run the software.
 
