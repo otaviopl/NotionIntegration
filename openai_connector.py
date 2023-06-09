@@ -32,8 +32,14 @@ def build_message(tasks):
         "\nInstructions:" + \
         "\n- Be brief and explain the prioritization." + \
         "\n- Tasks are in portuguese." + \
-        "\n- Answer with the format: #. <task_description> " + \
-        "- (<explanation_about_importance>) - <time_estimation>" + \
+        "\n- Answer with a JSON format: " + \
+        "\n{\n\t'task_name': {\n\t\t'priority_number': <int>," + \
+        "\n\t\t'priority_level': <high|medium|low>, \n\t\t'comment': " + \
+        "<str>\n\t}\n}" + \
+        "\n- Conclude with a general one line comment about the tasks." + \
+        "\n- Remove ':' character from tasks names so the output JSON " + \
+        "is always valid." + \
+        "\n- Make task names shorter." + \
         "\nTasks: "
 
     for task in tasks:

@@ -1,5 +1,6 @@
 import requests
 import json
+import json5
 import datetime
 import os.path
 import base64
@@ -29,6 +30,9 @@ SCOPES = [
 # Filter the Tasks search using this number of days in the future.
 DAYS_TO_CONSIDER = 7
 MESSAGES_API = "https://type.fit/api/quotes"
+
+# ChatGPT some times return with a broken JSON format...
+MAX_RETRIES_GPT = 3
 
 
 def load_notion_credentials():
@@ -132,14 +136,46 @@ def gmail_connect():
             token.write(creds.to_json())
 
 
+def parse_chatgpt_message(message):
+
+    # Break original message in lines.
+    message_lines = message.splitlines()
+
+    # Get the last line general comment.
+    general_message = message_lines[-1]
+
+    json_as_str = ""
+
+    for single_line in message_lines[:-2]:
+        json_as_str += single_line
+
+    # Discard the last 2 lines, and get the JSON from answer.
+    json_as_str = json_as_str.replace('\t', '')
+    json_as_str = json_as_str.replace('\n', '')
+    json_as_str = json_as_str.replace('\'', '\"')
+
+    print(json_as_str)
+
+    try:
+        json_obj = json5.loads(json_as_str)
+        return json_obj, general_message
+    except Exception:
+        print("Failed to parse ChatGPT answer.")
+        # Implement retry for ChatGPT.
+
+    return None, None
+
+
 def build_email_body(all_tasks, display_name, chatgpt_answer):
     """
     Build the email HTML using Jinja2. Template is in template/ folder.
     """
     print("Building email body...")
 
-    # Breaking ChatGPT message lines in <br>
-    chatgpt_answer = chatgpt_answer.splitlines()
+    message_json, general_message = parse_chatgpt_message(chatgpt_answer)
+    if not message_json:
+        return False
+
     nice_message = get_motivational_message()["text"]
     environment = Environment(loader=FileSystemLoader("templates/"))
     template = environment.get_template("email_template.html")
@@ -147,7 +183,8 @@ def build_email_body(all_tasks, display_name, chatgpt_answer):
         "username": display_name,
         "all_tasks": all_tasks,
         "nice_message": nice_message,
-        "chatgpt_answer": chatgpt_answer
+        "json_gpt_tasks": message_json,
+        "gpt_general_comment": general_message
     }
 
     return template.render(context)
