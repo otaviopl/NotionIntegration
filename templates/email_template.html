@@ -1,22 +1,22 @@
 <!doctype html>
 <html>
-    <body style="width: 600px; padding: 6px;">
+    <body style="width: 600px; padding: 6px; border-radius: 6px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
         <div class="divisor" style="width: 100%; height: 8px; background-color: #262626; border-radius: 3px; margin-bottom: 40px;"></div>
         <div class="welcome">
         <h1 id="title" style="color:#262626; font-size: 26px; text-align: center;">Olá, {{username}}.</h1>
 
-        <div class="ChatGPT" style="margin-top: 40px;">
+        <div class="ChatGPT" style="margin-top: 40px; padding-left: 20px">
             <p><span style="font-size: 24px;">&#128752;</span><span style="font-size: 22px;"> - ChatGPT:</span></p>
             <p style="font-size: 16px; font-style: italic;">Priorização via ChatGPT para as tarefas dos próximos dias.</p>
             {% for key, value in json_gpt_tasks.items() %}
                 <p class="single_task" style="margin-top: 26px; font-size: 18px;">&#10145; {{key}}</p>
                 
                 {% if value['priority_level'] == 'high' %}
-                    <div style="padding-left: 10px; border-radius: 4px; background-color: #FFCDD2;"><p>Ordem de prioridade: {{value['priority_number']}} - {{value['priority_level'].upper()}}</p></div>
+                    <div><p>Ordem de prioridade: {{value['priority_number']}} - <span style="padding-left: 4px; padding-right: 4px; border-radius: 4px; background-color: #FFCDD2;">{{value['priority_level'].upper()}}</span></p></div>
                 {% elif value['priority_level'] == 'medium' %}
-                    <div style="padding-left: 10px; border-radius: 4px; background-color: #FFF9C4;"><p>Ordem de prioridade: {{value['priority_number']}} - {{value['priority_level'].upper()}}</p></div>
+                    <div><p>Ordem de prioridade: {{value['priority_number']}} - <span style="padding-left: 4px; padding-right: 4px; border-radius: 4px; background-color: #FFF9C4;">{{value['priority_level'].upper()}}</span></p></div>
                 {% elif value['priority_level'] == 'low' %}
-                    <div style="padding-left: 10px; border-radius: 4px; background-color: #C8E6C9;"><p>Ordem de prioridade: {{value['priority_number']}} - {{value['priority_level'].upper()}}</p></div>
+                    <div><p>Ordem de prioridade: {{value['priority_number']}} - <span style="padding-left: 4px; padding-right: 4px; border-radius: 4px; background-color: #C8E6C9;">{{value['priority_level'].upper()}}</span></p></div>
                 {% endif %}
                 
                 <p>{{value['comment']}}</p>
@@ -24,7 +24,7 @@
             <p style="font-size: 18px; margin-top: 28px;">{{gpt_general_comment}}</p>
         </div>
 
-        <div class="final_message">
+        <div class="final_message" style="padding-left: 20px">
             <p id="final_message" style="margin-top: 40px; font-size: 16px">
                 <span style="font-size: 20px;">&#127919;</span><span style="font-style: italic;"> - {{nice_message}}</span>
             </p>

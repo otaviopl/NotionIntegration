@@ -3,11 +3,11 @@ import openai
 from dotenv import load_dotenv
 
 
-def call_openai_assistant(tasks):
+def call_openai_assistant(tasks, project_logger):
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_KEY")
 
-    print("Calling ChatGPT. This can take a while...")
+    project_logger.info("Calling ChatGPT. This can take a while...")
 
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
