@@ -9,9 +9,6 @@ from notion_connector import notion_connector
 # Days in the past to filter Tasks in Notion.
 DAYS_TO_CONSIDER = 7
 
-# Define logger global obj
-project_logger = None
-
 
 if __name__ == "__main__":
     project_logger = create_logger.create_logger()
