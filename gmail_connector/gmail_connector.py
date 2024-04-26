@@ -57,7 +57,7 @@ def build_email_body(all_tasks, display_name, chatgpt_answer,
 
     message_json, general_message = message_parser.\
         parse_chatgpt_message(chatgpt_answer, project_logger)
-    if not message_json:
+    if message_json is None:
         return False
 
     nice_message = nice_message_collector.get_motivational_message(

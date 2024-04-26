@@ -16,6 +16,7 @@ if __name__ == "__main__":
     all_tasks = notion_connector.collect_tasks_from_control_panel(
         n_days=DAYS_TO_CONSIDER, project_logger=project_logger
     )
+    
     chatgpt_answer = openai_connector.call_openai_assistant(
         all_tasks, project_logger
     )

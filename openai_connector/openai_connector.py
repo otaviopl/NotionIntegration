@@ -9,17 +9,18 @@ def call_openai_assistant(tasks, project_logger):
 
     project_logger.info("Calling ChatGPT. This can take a while...")
 
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+    completion = openai.chat.completions.create(
+        model="gpt-4-turbo",
         messages=[
             {
-                "role": "assistant",
+                "role": "user",
                 "content": build_message(tasks)
-            }
-        ]
+            },
+        ],
     )
-
+    
     answer = completion.choices[0].message.content
+
     return answer
 
 
@@ -32,13 +33,14 @@ def build_message(tasks):
         "\nInstructions:" + \
         "\n- Be brief and explain the prioritization." + \
         "\n- Tasks are in portuguese." + \
-        "\n- Answer with a JSON format: " + \
+        "\n- IMPORTANT: Answer with a pure JSON format without specify that is a JSON file. " + \
         "\n{\n\t'task_name': {\n\t\t'priority_number': <int>," + \
         "\n\t\t'priority_level': <high|medium|low>, \n\t\t'comment': " + \
         "<str>\n\t}\n}" + \
         "\n- Conclude with a general one line comment about the tasks." + \
         "\n- Remove ':' character from tasks names so the output JSON " + \
         "is always valid." + \
+        "\n- Different Projects means no related tasks." + \
         "\n- Make task names shorter." + \
         "\nTasks: "
 

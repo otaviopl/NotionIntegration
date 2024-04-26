@@ -10,7 +10,7 @@ def create_logger():
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler(log_file_path + "/log_file.txt"),
+            logging.FileHandler(log_file_path + "log_file.txt"),
             logging.StreamHandler()
         ]
     )

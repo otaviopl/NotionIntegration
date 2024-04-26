@@ -56,6 +56,7 @@ def collect_tasks_from_control_panel(n_days=7, project_logger=None):
             {
                 "name": d["properties"]["Task"]["title"][0]["text"]["content"],
                 "deadline": d["properties"]["Deadline"]["date"]["start"],
+                "project": d["properties"]["Project"]["select"]["name"]
             }
         )
 
