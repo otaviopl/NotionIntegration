@@ -1,7 +1,5 @@
 # Notion Bot to send email with Tasks :rocket:
 
-:construction: __UNDER CONSTRUCTION!__ :construction:
-
 Based on a Notion control panel, the software will fetch the tasks that must be completed in the next __N__ days and send them by email daily.
 
 The idea is to use this API connection with Notion to automate more things, and include more information in the automated email.
