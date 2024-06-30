@@ -20,7 +20,7 @@ SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 NOTION_API_KEY = os.getenv('NOTION_API_KEY')
 DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
 NOTION_API_URL = "https://api.notion.com/v1/pages"
-API_KEY=os.getenv('API_KEY')
+API_KEY=os.getenv('API_KEY_PROFESSIONAL')
 
 headers = {
 	"Authorization": f"Bearer {NOTION_API_KEY}",
@@ -58,7 +58,7 @@ def get_events(service=None):
 		while True:
 
 			events_result = service.events().list(
-				calendarId="primary",
+				calendarId="otavio.pereira.lopes@gmail.com",
 				timeMin=now,
 				maxResults=10,
 				singleEvents=True,
@@ -68,8 +68,34 @@ def get_events(service=None):
 			page_token = events_result.get('nextPageToken')
 			if not page_token:
 				break
-			
+
 		return events
 	except Exception as e:
 		print('An error occurred:', e)
 		return []
+	
+def get_events_from_account(email):
+	events=[]
+	service = build_google_service
+	now = datetime.datetime.utcnow().isoformat() + "Z" 
+	try:
+		while True:
+	
+			events_result = service.events().list(
+				calendarId=email,
+				timeMin=now,
+				maxResults=10,
+				singleEvents=True,
+				orderBy="startTime",
+			).execute()
+			events.extend(events_result.get('items', []))
+			page_token = events_result.get('nextPageToken')
+			if not page_token:
+				break
+
+		return events
+	except Exception as e:
+		print('An error occurred:', e)
+		return []
+
+	

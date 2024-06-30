@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
-from calendar_connector.calendar_connector import get_events
+from calendar_connector.calendar_connector import get_events,get_events_from_account
 API_KEY=os.getenv('API_KEY')
 
 class TestGoogleCalendar(unittest.TestCase):
@@ -46,8 +46,8 @@ class TestGoogleCalendar(unittest.TestCase):
 		event_summaries = [event['summary'] for event in events]
 		self.assertIn('teste', event_summaries, "Event with summary 'teste' not found")
 
-	def test_get_events_from_another_count(self):
-		events= get_events_from_another
+	def test_get_events_from_another_account(self):
+		events= get_events_from_account()
 		print('aaa',events)
 
 		event_summaries = [event['summary'] for event in events]

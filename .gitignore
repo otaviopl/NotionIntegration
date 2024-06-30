@@ -10,6 +10,8 @@ token.json
 email_config.json
 calendar.json
 token_calendar.json
+token_pro.json
+credentials_pro.json
 
 # C extensions
 *.so
