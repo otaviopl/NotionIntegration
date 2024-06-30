@@ -64,16 +64,11 @@ def get_events(service=None):
 				singleEvents=True,
 				orderBy="startTime",
 			).execute()
-
-			print('events_result',events_result)
 			events.extend(events_result.get('items', []))
 			page_token = events_result.get('nextPageToken')
 			if not page_token:
 				break
-		if not events:
-			print('No events found.')
-		else:
-			print(f'Fetched {len(events)} events.')
+			
 		return events
 	except Exception as e:
 		print('An error occurred:', e)

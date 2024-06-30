@@ -46,7 +46,12 @@ class TestGoogleCalendar(unittest.TestCase):
 		event_summaries = [event['summary'] for event in events]
 		self.assertIn('teste', event_summaries, "Event with summary 'teste' not found")
 
-			
+	def test_get_events_from_another_count(self):
+		events= get_events_from_another
+		print('aaa',events)
+
+		event_summaries = [event['summary'] for event in events]
+		self.assertIn('ocupado', event_summaries,'ocupado not found')
 
 if __name__ == "__main__":
 	unittest.main()
