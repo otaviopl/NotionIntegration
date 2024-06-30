@@ -26,7 +26,7 @@ headers = {
 }
 
 def get_events():
-    now = datetime.datetime.utcnow().isoformat() + 'Z'
+    now = datetime.datetime.isoformat() + 'Z'
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=10, singleEvents=True,
                                         orderBy='startTime').execute()
