@@ -1,6 +1,11 @@
 import unittest
-from unittest.mock import MagicMock
-from calendar import *
+from unittest.mock import MagicMock, patch
+
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+print(sys.path)
+from calendar_connector.calendar_connector import get_events
 
 class TestGetEvents(unittest.TestCase,):
 		
@@ -25,7 +30,7 @@ class TestGetEvents(unittest.TestCase,):
 
 		with patch('googleapiclient.discovery.build', return_value=self.mock_service):
 			result = get_events()
-			
+
 		self.assertEqual(len(result), 2)
 		self.assertIn('Evento 1', [event['summary'] for event in result])
 		self.assertIn('Evento 2', [event['summary'] for event in result])
