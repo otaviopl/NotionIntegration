@@ -29,9 +29,12 @@ headers = {
 
 def build_google_service():
 	"""Google Calendar service builder."""
-
-	service = build('calendar', 'v3', developerKey=API_KEY)
+	credentials = service_account.Credentials.from_service_account_file(
+		SERVICE_ACCOUNT_FILE, scopes=SCOPES
+	)
+	service = build('calendar', 'v3', credentials=credentials)
 	return service
+
 
 def get_events(service=None):
 	"""Get Events from Google Calendar.
@@ -46,15 +49,24 @@ def get_events(service=None):
 		print('criando servico com build google service\n')
 		service = build_google_service()
 	
-	now = datetime.datetime.utcnow().isoformat() + 'Z'
-	events_result = service.events().list(
-			calendarId='primary',
-		timeMin=now,
-		maxResults=10,
-		singleEvents=True,
-		orderBy='startTime'
-	).execute()
-	events = events_result.get('items', [])
-	print('eventos resgatados',events)
+	now = datetime.datetime.now(datetime.UTC)
+	try:
+		calendar = service.calendars().get(calendarId='primary').execute()
+		print('calendario',calendar['summary'])
 
+
+		events_result = service.events().list(
+			calendarId='otavio.pereira.lopes@gmail.com',
+			timeMin='2024-01-01T10:00:00-07:00',
+			timeMax='2024-07-05T10:00:00-07:00',
+			maxResults=10,
+			singleEvents=True,
+			orderBy='startTime'
+		).execute()
+		events = events_result.get('items', [])
+		print('Fetched events:', events)
+		return events
+	
+	except Exception as e:
+		print('Ocorreu erro:',e)
 	return events
