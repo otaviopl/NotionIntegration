@@ -48,7 +48,7 @@ def collect_tasks_from_control_panel(n_days=7, project_logger=None):
     response = requests.post(url, json=payload, headers=headers)
 
     data = json.loads(response.text)
-
+    print('aaaa data',data)
     all_task_data = []
 
     for d in data["results"]:
