@@ -29,9 +29,7 @@ headers = {
 
 def build_google_service():
 	"""Google Calendar service builder."""
-	credentials = service_account.Credentials.from_service_account_file(
-		SERVICE_ACCOUNT_FILE, scopes=SCOPES
-	)
+
 	service = build('calendar', 'v3', developerKey=API_KEY)
 	return service
 
