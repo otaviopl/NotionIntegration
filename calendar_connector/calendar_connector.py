@@ -38,14 +38,15 @@ def get_events(service=None):
     """Get Events from Google Calendar.
 
     Args:
-        service: Serivce from Google API.
+        service: Service from Google API.
 
     Returns:
         Events List.
     """
-
     if service is None:
+        print('criando servico com build google service\n')
         service = build_google_service()
+    
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     events_result = service.events().list(
         calendarId='primary',
@@ -55,5 +56,6 @@ def get_events(service=None):
         orderBy='startTime'
     ).execute()
     events = events_result.get('items', [])
+    print('eventos resgatados',events)
 
     return events
