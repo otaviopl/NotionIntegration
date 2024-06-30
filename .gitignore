@@ -9,6 +9,7 @@ notion_credentials.json
 token.json
 email_config.json
 calendar.json
+token_calendar.json
 
 # C extensions
 *.so

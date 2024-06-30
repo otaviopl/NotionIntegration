@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
-print(sys.path)
 from calendar_connector.calendar_connector import get_events
+API_KEY=os.getenv('API_KEY')
 
 class TestGoogleCalendar(unittest.TestCase):
 	def setUp(self):
