@@ -30,10 +30,9 @@ headers = {
 
 def build_google_service():
 	"""Google Calendar service builder."""
-	if os.path.exists("../token_calendar.json"):
-		creds = Credentials.from_authorized_user_file("../token_calendar.json", SCOPES)
+	if os.path.exists("../token_pro.json"):
+		creds = Credentials.from_authorized_user_file("../token_pro.json", SCOPES)
 	service = build("calendar", "v3", credentials=creds)
-	
 	return service
 
 def get_events(service=None):
@@ -59,11 +58,13 @@ def get_events(service=None):
 
 			events_result = service.events().list(
 				calendarId="otavio.pereira.lopes@gmail.com",
-				timeMin=now,
+				timeMin='2024-05-30T17:52:53.616Z',
+				timeMax='2024-06-30T17:52:53.616Z',
 				maxResults=10,
 				singleEvents=True,
 				orderBy="startTime",
 			).execute()
+
 			events.extend(events_result.get('items', []))
 			page_token = events_result.get('nextPageToken')
 			if not page_token:
@@ -76,11 +77,10 @@ def get_events(service=None):
 	
 def get_events_from_account(email):
 	events=[]
-	service = build_google_service
+	service = build_google_service()
 	now = datetime.datetime.utcnow().isoformat() + "Z" 
 	try:
 		while True:
-	
 			events_result = service.events().list(
 				calendarId=email,
 				timeMin=now,
@@ -88,6 +88,7 @@ def get_events_from_account(email):
 				singleEvents=True,
 				orderBy="startTime",
 			).execute()
+			print('eventos',events_result)
 			events.extend(events_result.get('items', []))
 			page_token = events_result.get('nextPageToken')
 			if not page_token:
